@@ -1,0 +1,33 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+__init__	layer.py	/^    def __init__(self, nf,fh,fw,weight_std=0.01):$/;"	m	class:convolution
+__init__	sigmoid_array.py	/^    def __init__(self):$/;"	m	class:sigmoid
+__init__	softmax.py	/^	def __init__(self):$/;"	m	class:softmax
+acculacy	main.py	/^    acculacy=[]$/;"	v
+backward	sigmoid_array.py	/^    def backward(self, dout):$/;"	m	class:sigmoid
+backward	softmax.py	/^	def backward(self, label):$/;"	m	class:softmax
+bat_size	main.py	/^    bat_size=100$/;"	v
+col2im	util.py	/^def col2im(din_shape,imcol,fh,fw, stride=1, pad=0):$/;"	f
+convolution	layer.py	/^class convolution(object):$/;"	c
+crossEntropyError	softmax.py	/^	def crossEntropyError(self,x,label):$/;"	m	class:softmax
+dout	main.py	/^        dout=hidden_layer(dout)$/;"	v
+dout	main.py	/^    dout=x_train[idx_list,:]$/;"	v
+dy	main.py	/^    dy={}$/;"	v
+forward	layer.py	/^    def forward(self, din):$/;"	m	class:convolution
+forward	sigmoid_array.py	/^    def forward(self, din):$/;"	m	class:sigmoid
+forward	softmax.py	/^	def forward(self, x,label):$/;"	m	class:softmax
+idx_list	main.py	/^        idx_list=np.random.choice(x_train.shape[0],bat_size)$/;"	v
+im2col	util.py	/^def im2col(din,fh,fw,stride=1, pad=0):$/;"	f
+loss	main.py	/^    loss=[]$/;"	v
+network	main.py	/^    network=[]$/;"	v
+output_layer	main.py	/^    output_layer=softmax.softmax()$/;"	v
+per_epoch	main.py	/^    per_epoch=int(max(x_train.shape[0]\/bat_size,1))$/;"	v
+sigmoid	sigmoid_array.py	/^class sigmoid(object):$/;"	c
+sigmoid_func	sigmoid_array.py	/^    def sigmoid_func(self,x):$/;"	m	class:sigmoid
+softmax	softmax.py	/^	def softmax(self,x):$/;"	m	class:softmax
+softmax	softmax.py	/^class softmax(object):$/;"	c
+y	main.py	/^    y={}$/;"	v
