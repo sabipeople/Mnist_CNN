@@ -4,6 +4,33 @@ import os
 import sys
 sys.path.append(os.getcwd())
 from util import im2col, col2im
+class affine:
+    def __init__(self, rows,cols,batch_size,weight_std=0.01):
+        self.w=weight_std*np.random.rand(rows,cols)#weight_std * np.random.randn(rows, cols)
+        self.B=np.random.rand(1,cols)#np.zeros((batch_size, cols))
+        self.x=None
+        self.y=None
+        self.dw=None
+        self.dB=None
+        self.dy=None
+        self.learning_rate=0.01
+	
+    def forward(self,din):
+        self.x=din
+        self.y=np.dot(din,self.w)+self.B
+        return self.y
+
+    def backward(self, dout):
+        self.dw=np.dot(self.x.transpose(),dout)
+        self.dB=dout
+        self.dy=np.dot(dout,self.w.transpose())
+        return self.dy
+    def update(self):
+        self.w-=self.learning_rate*self.dw
+        self.B-=self.learning_rate*np.sum(self.dB,axis=0)
+
+    def update_learningrate(self, ratio):
+        self.learning_rate *=ratio
 
 class convolution(object):
     def __init__(self,nf,fc,fh,fw,weight_std=0.01):
@@ -66,3 +93,52 @@ class Relu(object):
         dx=dout.copy()
         dx[self.mask]=0
         return dx
+class sigmoid(object):
+    def __init__(self):
+        self.x=None
+        self.y=None
+        self.dy=None
+        self.learning_rate=0.1
+
+    def sigmoid_func(self,x):
+        return 1/(1 + np.exp(-x))
+	
+    def forward(self, din):
+        self.x=din
+        self.y=self.sigmoid_func(din)
+        return self.y
+
+    def backward(self, dout):
+        self.dy=np.multiply(dout,np.multiply(self.y,1-self.y))
+        return self.dy
+
+class softmax(object):
+    def __init__(self):
+        self.x=None
+	self.y=None
+	self.dy=None
+	self.error=None
+
+    def softmax(self,x):
+	max_x=x.max(1)
+	exp_x=np.exp(x-max_x.reshape(max_x.shape[0],1))
+	sum_of_row=np.sum(exp_x,1)
+	for i in range(sum_of_row.shape[0]):
+	    exp_x[i,:]=exp_x[i,:]/sum_of_row[i]
+        return exp_x
+
+    def crossEntropyError(self,x,label):
+        delta=1e-7
+	ln_x=np.log(x+delta)
+	error=-np.sum(np.multiply(label,ln_x),1)
+	return error
+
+    def forward(self, x,label):
+	self.x=x.copy()
+	self.y=self.softmax(self.x)
+	self.error=self.crossEntropyError(self.y,label)
+	return self.y
+
+    def backward(self, label):
+	self.dy=self.y-label
+	return self.dy
