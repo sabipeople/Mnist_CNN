@@ -3,8 +3,6 @@ import numpy as np
 import sys
 import os
 import pdb
-import sigmoid_array
-import softmax
 import layer
 
 sys.path.append("/home/sabi/workspace/reference_code/deep-learning-from-scratch/")
@@ -17,8 +15,13 @@ if __name__=="__main__":
     dy={}
     bat_size=100
     network=[]
-    network.append(layer.convolution(50,3,3))
-    output_layer=softmax.softmax()
+    network.append(layer.convolution(30,1,5,5))
+    network.append(layer.Relu())
+    network.append(layer.Maxpool(2,2,2,0))
+    network.append(layer.affine(50*13*13,100))
+    network.append(layer.Relu())
+    network.append(layer.affine(100,10))
+    output_layer=layer.softmax()
     loss=[]
     acculacy=[]
     per_epoch=int(max(x_train.shape[0]/bat_size,1))
@@ -31,10 +34,10 @@ if __name__=="__main__":
     for hidden_layer in network:
         pdb.set_trace()
         dout=hidden_layer.forward(dout)
-    '''
+    
     output_layer.forward(dout,t_train[idx_list,:])
         
-
+'''
     #back propagation
     dout=output_layer.backward(t_train[idx_list,:])
     for hidden_layer in network.reverse():

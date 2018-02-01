@@ -4,30 +4,47 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
-__init__	layer.py	/^    def __init__(self, nf,fh,fw,weight_std=0.01):$/;"	m	class:convolution
-__init__	sigmoid_array.py	/^    def __init__(self):$/;"	m	class:sigmoid
-__init__	softmax.py	/^	def __init__(self):$/;"	m	class:softmax
+Maxpool	layer.py	/^class Maxpool(object):$/;"	c
+Relu	layer.py	/^class Relu(object):$/;"	c
+__init__	layer.py	/^    def __init__(self):$/;"	m	class:Relu
+__init__	layer.py	/^    def __init__(self):$/;"	m	class:sigmoid
+__init__	layer.py	/^    def __init__(self):$/;"	m	class:softmax
+__init__	layer.py	/^    def __init__(self, rows,cols,batch_size,weight_std=0.01):$/;"	m	class:affine
+__init__	layer.py	/^    def __init__(self,fh,fw,stride=1,pad=0):$/;"	m	class:Maxpool
+__init__	layer.py	/^    def __init__(self,nf,fc,fh,fw,stride=1,pad=0,weight_std=0.01):$/;"	m	class:convolution
 acculacy	main.py	/^    acculacy=[]$/;"	v
-backward	sigmoid_array.py	/^    def backward(self, dout):$/;"	m	class:sigmoid
-backward	softmax.py	/^	def backward(self, label):$/;"	m	class:softmax
+affine	layer.py	/^class affine:$/;"	c
+backward	layer.py	/^    def backward(self, dout):$/;"	m	class:affine
+backward	layer.py	/^    def backward(self, dout):$/;"	m	class:sigmoid
+backward	layer.py	/^    def backward(self, label):$/;"	m	class:softmax
+backward	layer.py	/^    def backward(self,dout):$/;"	m	class:Maxpool
+backward	layer.py	/^    def backward(self,dout):$/;"	m	class:Relu
+backward	layer.py	/^    def backward(self,dout):$/;"	m	class:convolution
 bat_size	main.py	/^    bat_size=100$/;"	v
 col2im	util.py	/^def col2im(din_shape,imcol,fh,fw, stride=1, pad=0):$/;"	f
 convolution	layer.py	/^class convolution(object):$/;"	c
-crossEntropyError	softmax.py	/^	def crossEntropyError(self,x,label):$/;"	m	class:softmax
-dout	main.py	/^        dout=hidden_layer(dout)$/;"	v
-dout	main.py	/^    dout=x_train[idx_list,:]$/;"	v
+crossEntropyError	layer.py	/^    def crossEntropyError(self,x,label):$/;"	m	class:softmax
+dout	main.py	/^        dout=hidden_layer.forward(dout)$/;"	v
+dout	main.py	/^    dout=train_image[idx_list,:]$/;"	v
 dy	main.py	/^    dy={}$/;"	v
 forward	layer.py	/^    def forward(self, din):$/;"	m	class:convolution
-forward	sigmoid_array.py	/^    def forward(self, din):$/;"	m	class:sigmoid
-forward	softmax.py	/^	def forward(self, x,label):$/;"	m	class:softmax
+forward	layer.py	/^    def forward(self, din):$/;"	m	class:sigmoid
+forward	layer.py	/^    def forward(self, x,label):$/;"	m	class:softmax
+forward	layer.py	/^    def forward(self,din):$/;"	m	class:Relu
+forward	layer.py	/^    def forward(self,din):$/;"	m	class:affine
+forward	layer.py	/^    def forward(self,din,stride=1,pad=0):$/;"	m	class:Maxpool
 idx_list	main.py	/^        idx_list=np.random.choice(x_train.shape[0],bat_size)$/;"	v
 im2col	util.py	/^def im2col(din,fh,fw,stride=1, pad=0):$/;"	f
 loss	main.py	/^    loss=[]$/;"	v
 network	main.py	/^    network=[]$/;"	v
-output_layer	main.py	/^    output_layer=softmax.softmax()$/;"	v
+output_layer	main.py	/^    output_layer=layer.softmax()$/;"	v
 per_epoch	main.py	/^    per_epoch=int(max(x_train.shape[0]\/bat_size,1))$/;"	v
-sigmoid	sigmoid_array.py	/^class sigmoid(object):$/;"	c
-sigmoid_func	sigmoid_array.py	/^    def sigmoid_func(self,x):$/;"	m	class:sigmoid
-softmax	softmax.py	/^	def softmax(self,x):$/;"	m	class:softmax
-softmax	softmax.py	/^class softmax(object):$/;"	c
+sigmoid	layer.py	/^class sigmoid(object):$/;"	c
+sigmoid_func	layer.py	/^    def sigmoid_func(self,x):$/;"	m	class:sigmoid
+softmax	layer.py	/^    def softmax(self,x):$/;"	m	class:softmax
+softmax	layer.py	/^class softmax(object):$/;"	c
+train_image	main.py	/^    train_image=x_train.reshape(x_train.shape[0],1,28,28)$/;"	v
+update	layer.py	/^    def update(self):$/;"	m	class:affine
+update	layer.py	/^    def update(self):$/;"	m	class:convolution
+update_learningrate	layer.py	/^    def update_learningrate(self, ratio):$/;"	m	class:affine
 y	main.py	/^    y={}$/;"	v
