@@ -13,7 +13,7 @@ class affine:
         self.dw=None
         self.dB=None
         self.dy=None
-        self.learning_rate=0.01
+        self.learning_rate=0.001
 	
     def forward(self,din):
         self.original_shape=din.shape
@@ -77,8 +77,8 @@ class convolution(object):
         dy=col2im(self.din_shape,col_dy,self.fh,self.fw,self.stride,self.pad)
         return dy
     def update(self):
-        self.w-=0.01*self.dw
-        self.b-=0.01*self.db
+        self.w-=0.001*self.dw
+        self.b-=0.001*self.db
 
 class Relu(object):
     def __init__(self):
