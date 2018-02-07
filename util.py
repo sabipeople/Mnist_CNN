@@ -27,15 +27,15 @@ def col2im(din_shape,imcol,fh,fw, stride=1, pad=0):
 	N,C,H,W = din_shape
 	oh=(H+2*pad-fh)//stride +1
 	ow=(W+2*pad-fw)//stride +1
-	img=np.zeros(shape(N,C,H+2*pad,W+2*pad))
-	col = imcol.reshape(N,oh,ow,C,H+2*pad,W+2*pad).tranpose(0,3,4,5,1,2)
+	img=np.zeros(shape=(N,C,H+2*pad,W+2*pad))
+	col = imcol.reshape(N,oh,ow,C,fh,fw).transpose(0,3,4,5,1,2)
 	for y in range(fh):
 		ymax=y+stride*oh
 		for x in range(fw):
 			xmax=x+stride*ow
 			img[:,:,y:ymax:stride,x:xmax:stride]+=col[:,:,y,x,:,:]
 	
-		return img[:,:,pad:H,pad:W]
+	return img[:,:,pad:H,pad:W]
 
 
 

@@ -6,8 +6,8 @@ sys.path.append(os.getcwd())
 from util import im2col, col2im
 class affine:
     def __init__(self, insize,outsize,weight_std=0.01):
-        self.w=weight_std*np.random.rand(insize,outsize)#weight_std * np.random.randn(rows, cols)
-        self.B=np.random.rand(1,outsize)#np.zeros((batch_size, cols))
+        self.w=np.random.randn(insize,outsize)*np.sqrt(2/insize)#weight_std * np.random.randn(rows, cols)
+        self.B=np.zeros(outsize)
         self.x=None
         self.y=None
         self.dw=None
@@ -38,7 +38,7 @@ class affine:
 
 class convolution(object):
     def __init__(self,nf,fc,fh,fw,stride=1,pad=0,weight_std=0.01):
-        self.w=weight_std*np.random.rand(nf,fc,fh,fw)
+        self.w=weight_std*np.random.randn(nf,fc,fh,fw)
         self.nf=nf
         self.fc=fc
         self.fh=fh
@@ -77,8 +77,8 @@ class convolution(object):
         dy=col2im(self.din_shape,col_dy,self.fh,self.fw,self.stride,self.pad)
         return dy
     def update(self):
-        self.w+=0.01*self.dw
-        self.b+=0.01*self.db
+        self.w-=0.01*self.dw
+        self.b-=0.01*self.db
 
 class Relu(object):
     def __init__(self):
@@ -93,6 +93,8 @@ class Relu(object):
         dx=dout.copy()
         dx[self.mask]=0
         return dx
+    def update(self):
+        pass
 class Maxpool(object):
     def __init__(self,fh,fw,stride=1,pad=0):
         self.mask=0
@@ -113,18 +115,19 @@ class Maxpool(object):
         imcol=im2col(din,self.fh,self.fw,self.stride,self.pad)
         #N*oh*ow*C, fh*fw로 모양 변화
         imcol=imcol.reshape(-1,self.fh*self.fw)
-
         self.mask=np.argmax(imcol,axis=1)
-        dout=din[self.mask]
+        dout=imcol.max(axis=1)
         return dout.reshape(N,oh,ow,C).transpose(0,3,1,2)
     def backward(self,dout):
         N,C,oh,ow=dout.shape
         dtmp=dout.transpose(0,2,3,1).reshape(-1)
-        dy=np.zeros(N*oh*ow*C,self.fw*self.fh)
-        dy[self.mask]=dtmp
+        dy=np.zeros((dout.size,self.fw*self.fh))
+        dy[np.arange(self.mask.size),self.mask.flatten()]=dtmp
         dy=dy.reshape(N*oh*ow,C*self.fh*self.fw)
-        img=col2im(self.original_shape,dy,self.fh,self.fw,self.stride,self.pad)
+        img=col2im(self.din_shape,dy,self.fh,self.fw,self.stride,self.pad)
         return img
+    def update(self):
+        pass
 
 
 class sigmoid(object):
@@ -145,6 +148,8 @@ class sigmoid(object):
     def backward(self, dout):
         self.dy=np.multiply(dout,np.multiply(self.y,1-self.y))
         return self.dy
+    def update(self):
+        pass
 
 class softmax(object):
     def __init__(self):
@@ -157,9 +162,10 @@ class softmax(object):
         max_x=x.max(1)
         exp_x=np.exp(x-max_x.reshape(max_x.shape[0],1))
         sum_of_row=np.sum(exp_x,1)
-        for i in range(sum_of_row.shape[0]):
-            exp_x[i,:]=exp_x[i,:]/sum_of_row[i]
-        return exp_x
+        exp_x=exp_x.T/sum_of_row
+       # for i in range(sum_of_row.shape[0]):
+       #     exp_x[i,:]=exp_x[i,:]/sum_of_row[i]
+        return exp_x.T
 
     def crossEntropyError(self,x,label):
         delta=1e-7
@@ -176,3 +182,5 @@ class softmax(object):
     def backward(self, label):
         self.dy=self.y-label
         return self.dy
+    def update(self):
+        pass
